@@ -248,16 +248,22 @@ function App() {
                         <tr key={res.filename + i}>
                           <td>{res.filename}</td>
                           <td>
-                            <span style={{ color: res.status === 'success' ? 'var(--success)' : 'var(--error)' }}>
+                            <span style={{ color: res.status === 'success' ? 'var(--success)' : res.status === 'duplicate' ? 'orange' : 'var(--error)' }}>
                               {res.status}
                             </span>
                           </td>
-                          <td>{res.extracted_data?.vendor_name || '-'}</td>
-                          <td>{res.extracted_data?.currency} {res.extracted_data?.total_amount}</td>
-                          <td>
-                            {res.extracted_data?.confidence_score ? 
-                                `${(res.extracted_data.confidence_score * 100).toFixed(0)}%` : '-'}
+                          <td colSpan={res.status !== 'success' ? 3 : 1}>
+                            {res.status === 'success' ? (res.extracted_data?.vendor_name || '-') : res.message}
                           </td>
+                          {res.status === 'success' && (
+                            <>
+                              <td>{res.extracted_data?.currency} {res.extracted_data?.total_amount}</td>
+                              <td>
+                                {res.extracted_data?.confidence_score ? 
+                                    `${(res.extracted_data.confidence_score * 100).toFixed(0)}%` : '-'}
+                              </td>
+                            </>
+                          )}
                         </tr>
                       ))}
                     </tbody>

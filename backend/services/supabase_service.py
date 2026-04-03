@@ -113,6 +113,22 @@ def delete_invoice(invoice_id: str) -> bool:
 
     return True
 
+def check_is_duplicate(vendor_name: str, invoice_number: str) -> bool:
+    if not URL or not vendor_name or not invoice_number:
+        return False
+        
+    import urllib.parse
+    v_name = urllib.parse.quote(str(vendor_name))
+    i_num = urllib.parse.quote(str(invoice_number))
+    
+    query_url = f"{URL}/rest/v1/invoices?select=id&vendor_name=eq.{v_name}&invoice_number=eq.{i_num}&limit=1"
+    with httpx.Client(timeout=10.0) as client:
+        response = client.get(query_url, headers=get_headers())
+        if response.status_code == 200:
+            data = response.json()
+            return len(data) > 0
+    return False
+
 def get_history_for_vendor(vendor_name: str) -> List[Dict[str, Any]]:
     if not URL or not vendor_name:
         return []

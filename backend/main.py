@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from dotenv import load_dotenv
 from services.gemini_service import process_invoice, detect_mime_type
-from services.supabase_service import upload_file_to_storage, store_invoice_data, get_analytics, delete_invoice
+from services.supabase_service import upload_file_to_storage, store_invoice_data, get_analytics, delete_invoice, check_is_duplicate
 
 load_dotenv()
 
@@ -53,6 +53,16 @@ async def upload_invoices(files: List[UploadFile] = File(...)):
             # Use a smaller prompt for speed
             pre_extract = await process_invoice(local_path, mime_type)
             vendor_name = pre_extract.get("vendor_name")
+            invoice_number = pre_extract.get("invoice_number")
+            
+            if vendor_name and invoice_number and check_is_duplicate(vendor_name, invoice_number):
+                results.append({
+                    "filename": file.filename,
+                    "status": "duplicate",
+                    "message": f"Duplicate invoice detected for vendor {vendor_name} with invoice number {invoice_number}",
+                    "extracted_data": {} # or omit
+                })
+                continue # Skip processing and save LLM token cost
             
             # Step 2: Fetch history for this vendor to "Reuse template/logic"
             history = []

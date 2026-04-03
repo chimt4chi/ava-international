@@ -1,0 +1,36 @@
+[
+  {
+    "vendor_name": "CloudNine Solutions",
+    "invoice_number": "INV-2023-001",
+    "invoice_date": "2023-11-15",
+    "total_amount": 1250.50,
+    "currency": "USD",
+    "tax_amount": 150.00,
+    "items": [
+      {
+        "description": "Premium SaaS Subscription (Yearly)",
+        "quantity": 1,
+        "unit_price": 1100.50,
+        "total": 1100.50
+      }
+    ],
+    "confidence_score": 0.98
+  },
+  {
+    "vendor_name": "OfficeDepot Corp",
+    "invoice_number": "OD-99827",
+    "invoice_date": "2023-12-01",
+    "total_amount": 45.20,
+    "currency": "USD",
+    "tax_amount": 3.40,
+    "items": [
+      {
+        "description": "A4 Paper Reams",
+        "quantity": 5,
+        "unit_price": 8.00,
+        "total": 40.00
+      }
+    ],
+    "confidence_score": 0.95
+  }
+]
